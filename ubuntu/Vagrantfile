@@ -16,85 +16,39 @@ Vagrant.configure("2") do |config|
 end
 end
 end
-Vagrant.configure("2") do |config|
-
-  # Specify the box to use
-  config.vm.box = "generic/rhel8"
-
-  # Define 4 VMs
-  (1..2).each do |i|
-    config.vm.define "redhat#{i}" do |node|
-      node.vm.hostname = "redhat#{i}"
-      
-      # Set the VM provider to VirtualBox
-      node.vm.provider :virtualbox do |vb|
-        vb.name = "redhat#{i}"
-        vb.memory = "2048"
-        vb.cpus = 2
-      end
-
-      # Configure the VM
-      node.vm.provision "shell", inline: <<-SHELL
-        # Set the username and password
-        useradd -m -p $(openssl passwd -1 redhatp) -s /bin/bash redhat
-
-        # Allow password authentication
-        sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
-
-        # Restart sshd
-        systemctl restart sshd
-      SHELL
-
-    end
-  end
-
-end
-
-
-
-
-
-# # Define the box images for each VM
-# ubuntu_box = "generic/ubuntu2004"
-# rhel_box = "generic/rhel8"
 # Vagrant.configure("2") do |config|
 
-# # Define the loop for Ubuntu VMs
-# (1..2).each do |i|
-#   config.vm.define "ubuntu#{i}" do |vm|
-#     vm.vm.box = ubuntu_box
-#     vm.vm.hostname = "ubuntu#{i}"
-#     vm.vm.network "public_network", bridge: "wlp108s0"
-#     vm.vm.provider "virtualbox" do |vb|
-#       vb.name = "ubuntu#{i}"
-#       vb.memory = "2048"
-#       vb.cpus = "2"
+#   # Specify the box to use
+#   config.vm.box = "generic/rhel8"
+
+#   # Define 4 VMs
+#   (1..2).each do |i|
+#     config.vm.define "redhat#{i}" do |node|
+#       node.vm.hostname = "redhat#{i}"
+      
+#       # Set the VM provider to VirtualBox
+#       node.vm.provider :virtualbox do |vb|
+#         vb.name = "redhat#{i}"
+#         vb.memory = "2048"
+#         vb.cpus = 2
+#       end
+
+#       # Configure the VM
+#       node.vm.provision "shell", inline: <<-SHELL
+#         # Set the username and password
+#         useradd -m -p $(openssl passwd -1 redhatp) -s /bin/bash redhat
+
+#         # Allow password authentication
+#         sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+#         # Restart sshd
+#         systemctl restart sshd
+#       SHELL
+
 #     end
-#     vm.vm.provision "shell", inline: "echo 'ubuntu' | passwd ubuntu --stdin"
-#     vm.ssh.username = "ubuntu"
-#     vm.ssh.password = "ubuntu"
 #   end
-# end
 
-# # Define the loop for RHEL VMs
-# (1..2).each do |i|
-#   config.vm.define "rhel#{i}" do |vm|
-#     vm.vm.box = rhel_box
-#     vm.vm.hostname = "rhel#{i}"
-#     vm.vm.network "public_network", bridge: "wlp108s0"
-#     vm.vm.provider "virtualbox" do |vb|
-#       vb.name = "rhel#{i}"
-#       vb.memory = "2048"
-#       vb.cpus = "2"
-#     end
-#     vm.vm.provision "shell", inline: "echo 'rhel' | passwd root --stdin"
-#     vm.ssh.username = "root"
-#     vm.ssh.password = "rhel"
-#   end
 # end
-# end
-
-
 
 
 
