@@ -5,7 +5,7 @@ Vagrant.configure("2") do |config|
 
   # Specify the box to use
   config.vm.box = "generic/rhel8"
- (1..4).each do |i|
+  (1..4).each do |i|
   config.vm.define "redhat#{i}" do |node|
   node.vm.hostname = "redhat#{i}"
   node.vm.network "private_network", ip: "192.168.50.#{i+10}"
@@ -33,5 +33,7 @@ Vagrant.configure("2") do |config|
     systemctl restart sshd
   SHELL
 
+end
+end
 end
 
