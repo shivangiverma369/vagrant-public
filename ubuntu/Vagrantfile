@@ -1,6 +1,7 @@
 # Define the box images for each VM
 ubuntu_box = "generic/ubuntu2004"
 rhel_box = "generic/rhel8"
+Vagrant.configure("2") do |config|
 
 # Define the loop for Ubuntu VMs
 (1..2).each do |i|
