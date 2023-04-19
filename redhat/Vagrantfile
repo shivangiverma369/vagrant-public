@@ -37,7 +37,7 @@
 # end
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "generic/redhat7"
+  config.vm.box = "generic/redhat8"
 
   (1..4).each do |i|
     config.vm.define "redhat#{i}" do |node|
