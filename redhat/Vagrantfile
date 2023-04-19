@@ -35,24 +35,40 @@
 # end
 # end
 # end
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "generic/redhat8"
 
+  # Specify the box to use
+  config.vm.box = "generic/rhel8"
+
+  # Define 4 VMs
   (1..4).each do |i|
     config.vm.define "redhat#{i}" do |node|
       node.vm.hostname = "redhat#{i}"
-      node.vm.network "public_network", bridge: "wlp108s0"
-
-      node.vm.provider "virtualbox" do |vb|
+      
+      # Set the VM provider to VirtualBox
+      node.vm.provider :virtualbox do |vb|
         vb.name = "redhat#{i}"
-        vb.memory = "1024"
+        vb.memory = "2048"
+        vb.cpus = 2
       end
 
+      # Configure the VM
       node.vm.provision "shell", inline: <<-SHELL
-        useradd -m -s /bin/bash redhat
-        echo 'redhat:redhatp' | chpasswd
+        # Set the username and password
+        useradd -m -p $(openssl passwd -1 redhatp) -s /bin/bash redhat
+
+        # Allow password authentication
+        sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+        # Restart sshd
+        systemctl restart sshd
       SHELL
+
     end
   end
+
 end
+
