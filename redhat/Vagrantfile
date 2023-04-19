@@ -1,38 +1,58 @@
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
+# # -*- mode: ruby -*-
+# # vi: set ft=ruby :
 
-Vagrant.configure("2") do |config|
+# Vagrant.configure("2") do |config|
 
-  # Specify the box to use
-  config.vm.box = "generic/rhel8"
-  (1..4).each do |i|
-  config.vm.define "redhat#{i}" do |node|
-  node.vm.hostname = "redhat#{i}"
+#   # Specify the box to use
+#   config.vm.box = "generic/rhel8"
+#   (1..4).each do |i|
+#   config.vm.define "redhat#{i}" do |node|
+#   node.vm.hostname = "redhat#{i}"
 
  
-  # Set the VM hostname
-  # config.vm.hostname = "redhat-vm"
+#   # Set the VM hostname
+#   # config.vm.hostname = "redhat-vm"
 
-  # Set the VM provider to libvirt
-  node.vm.provider :virtualbox do |vb|
-    vb.name = "redhat#{i}"
-    vb.memory = "2048"
-    vb.cpus = 2
+#   # Set the VM provider to libvirt
+#   node.vm.provider :virtualbox do |vb|
+#     vb.name = "redhat#{i}"
+#     vb.memory = "2048"
+#     vb.cpus = 2
+#   end
+
+#   # Configure the VM
+#   node.vm.provision "shell", inline: <<-SHELL
+#     # Set the username and password
+#     useradd -m -p $(openssl passwd -1 redhatp) -s /bin/bash redhat
+
+#     # Allow password authentication
+#     sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+#     # Restart sshd
+#     systemctl restart sshd
+#   SHELL
+
+# end
+# end
+# end
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "generic/redhat7"
+
+  (1..4).each do |i|
+    config.vm.define "redhat#{i}" do |node|
+      node.vm.hostname = "redhat#{i}"
+      node.vm.network "public_network", bridge: "wlp108s0"
+
+      node.vm.provider "virtualbox" do |vb|
+        vb.name = "redhat#{i}"
+        vb.memory = "1024"
+      end
+
+      node.vm.provision "shell", inline: <<-SHELL
+        useradd -m -s /bin/bash redhat
+        echo 'redhat:redhatp' | chpasswd
+      SHELL
+    end
   end
-
-  # Configure the VM
-  node.vm.provision "shell", inline: <<-SHELL
-    # Set the username and password
-    useradd -m -p $(openssl passwd -1 redhatp) -s /bin/bash redhat
-
-    # Allow password authentication
-    sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
-
-    # Restart sshd
-    systemctl restart sshd
-  SHELL
-
 end
-end
-end
-
