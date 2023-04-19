@@ -1,66 +1,96 @@
-# Vagrant.configure("2") do |config|
-#   config.vm.box = "ubuntu/focal64"
-#   (1..3).each do |i|
-#     config.vm.define "ubuntu#{i}" do |node|
-#       node.vm.hostname = "ubuntu#{i}"
-#       node.vm.network "public_network", bridge: "wlp108s0"
-#     node.vm.provider "virtualbox" do |vb|
-#       vb.name = "ubuntu#{i}"
-#       vb.memory = "2048"
-#       vb.cpus = "2"
-#      end
-#     node.vm.provision "shell", inline: <<-SHELL
-#     useradd -m -s /bin/bash ubuntu
-#     echo 'ubuntu:ubuntup' | chpasswd
-#   SHELL
-# end
-# end
-# end
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/focal64"
+  (1..3).each do |i|
+    config.vm.define "ubuntu#{i}" do |node|
+      node.vm.hostname = "ubuntu#{i}"
+      node.vm.network "public_network", bridge: "wlp108s0"
+    node.vm.provider "virtualbox" do |vb|
+      vb.name = "ubuntu#{i}"
+      vb.memory = "2048"
+      vb.cpus = "2"
+     end
+    node.vm.provision "shell", inline: <<-SHELL
+    useradd -m -s /bin/bash ubuntu
+    echo 'ubuntu:ubuntup' | chpasswd
+  SHELL
+end
+end
+config.vm.box = "generic/rhel8"
+
+  # Define 4 VMs
+  (1..2).each do |i|
+    config.vm.define "redhat#{i}" do |node|
+      node.vm.hostname = "redhat#{i}"
+      
+      # Set the VM provider to VirtualBox
+      node.vm.provider :virtualbox do |vb|
+        vb.name = "redhat#{i}"
+        vb.memory = "2048"
+        vb.cpus = 2
+      end
+
+      # Configure the VM
+      node.vm.provision "shell", inline: <<-SHELL
+        # Set the username and password
+        useradd -m -p $(openssl passwd -1 redhatp) -s /bin/bash redhat
+
+        # Allow password authentication
+        sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+        # Restart sshd
+        systemctl restart sshd
+      SHELL
+
+    end
+  end
+
+end
+
 # Specify the box image for each VM
 # ubuntu_boxes = ["ubuntu/focal64", "ubuntu/focal64", "ubuntu/focal64"]
 # rhel_box = "generic/rhel8"
 
 # Specify the box image for each VM
-ubuntu_box = "ubuntu/focal64"
-rhel_box = "generic/rhel8"
+# ubuntu_box = "ubuntu/focal64"
+# rhel_box = "generic/rhel8"
 
-# Define the configuration for each VM
-Vagrant.configure("2") do |config|
+# # Define the configuration for each VM
+# Vagrant.configure("2") do |config|
 
-  # Define the three Ubuntu VMs
-  (1..3).each do |i|
-    config.vm.define "ubuntu#{i}" do |vm|
-      vm.vm.box = ubuntu_box
-      vm.vm.hostname = "ubuntu#{i}"
-      vm.vm.network "public_network", bridge: "wlp108s0"
-      vm.vm.provider "virtualbox" do |vb|
-        vb.name = "ubuntu#{i}"
-        vb.gui = false
-        vb.memory = "2048"
-        vb.cpus = "2"
-      end
-      vm.vm.provision "shell", inline: "echo 'ubuntu' | passwd ubuntu --stdin"
-      vm.ssh.username = "ubuntu"
-      vm.ssh.password = "ubuntu"
-    end
-  end
+#   # Define the three Ubuntu VMs
+#   (1..3).each do |i|
+#     config.vm.define "ubuntu#{i}" do |vm|
+#       vm.vm.box = ubuntu_box
+#       vm.vm.hostname = "ubuntu#{i}"
+#       vm.vm.network "public_network", bridge: "wlp108s0"
+#       vm.vm.provider "virtualbox" do |vb|
+#         vb.name = "ubuntu#{i}"
+#         vb.gui = false
+#         vb.memory = "2048"
+#         vb.cpus = "2"
+#       end
+#       vm.vm.provision "shell", inline: "echo 'ubuntu' | passwd ubuntu --stdin"
+#       vm.ssh.username = "ubuntu"
+#       vm.ssh.password = "ubuntu"
+#     end
+#   end
 
-  # Define the RHEL VM
-  config.vm.define "rhel8" do |vm|
-    vm.vm.box = rhel_box
-    vm.vm.hostname = "rhel8"
-    vm.vm.network "public_network", bridge: "wlp108s0"
-    vm.vm.provider "virtualbox" do |vb|
-      vb.name = "rhel8"
-      vb.gui = false
-      vb.memory = "2048"
-      vb.cpus = "2"
-    end
-    vm.vm.provision "shell", inline: "echo 'rhel' | passwd redhat --stdin"
-    vm.ssh.username = "redhat"
-    vm.ssh.password = "redhat"
-  end
+  ## Define the RHEL VM
+#   config.vm.define "rhel8" do |vm|
+#     vm.vm.box = rhel_box
+#     vm.vm.hostname = "rhel8"
+#     vm.vm.network "public_network", bridge: "wlp108s0"
+#     vm.vm.provider "virtualbox" do |vb|
+#       vb.name = "rhel8"
+#       vb.gui = false
+#       vb.memory = "2048"
+#       vb.cpus = "2"
+#     end
+#     vm.vm.provision "shell", inline: "echo 'rhel' | passwd redhat --stdin"
+#     vm.ssh.username = "redhat"
+#     vm.ssh.password = "redhat"
+#   end
 
-end
+# end
 
 
