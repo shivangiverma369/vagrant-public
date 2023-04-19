@@ -36,6 +36,7 @@ end
     vm.ssh.password = "rhel"
   end
 end
+end
 
 
 
