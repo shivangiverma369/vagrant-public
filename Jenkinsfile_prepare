@@ -86,7 +86,7 @@ pipeline {
         currentBuild.displayName = env.BUILD_NUMBER + "-" + params.project
         // component = params.project
         // sh "echo '${component}'"
-        sh "./run.sh ubunut_clean-up"
+        sh "./run.sh ubuntu_clean-up"
       }
       else if (params.project == 'xyz' && params.deployment == 'clean-up') {
         currentBuild.displayName = env.BUILD_NUMBER + "-" + params.project
