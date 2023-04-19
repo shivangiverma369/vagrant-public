@@ -18,10 +18,10 @@ pipeline {
       description: 'vm to deploy or destroy.'
     )
     choice(
-      name: 'os_type',
+      name: 'project',
       choices: [
-        'p1',
-        'p2'
+        'abc',
+        'xyz'
         // 'ubuntu',
         // 'ubuntu_clean-up',
         // 'redhat_clean-up',
@@ -55,7 +55,7 @@ pipeline {
           ],
           userRemoteConfigs: [[
             credentialsId: env.GIT_CREDENTIAL_ID,
-            url: 'https://github.com/shivangiverma369/vagrant'
+            url: 'https://github.com/shivangiverma369/vagrant-public'
           ]]
         ])
         script {commitId = sh(returnStdout: true, script: 'git rev-parse --short HEAD')}
@@ -64,17 +64,17 @@ pipeline {
    stage('Deploy virtual machine') {
     steps {
      script {
-      if (params.os_type == 'ubuntu' && params.deployment == 'deploy-vm') {
-        currentBuild.displayName = env.BUILD_NUMBER + "-" + params.os_type
-        component = params.os_type
+      if (params.project == 'abc' && params.deployment == 'deploy-vm') {
+        currentBuild.displayName = env.BUILD_NUMBER + "-" + params.project
+        component = params.project
         sh "echo '${component}'"
-        sh "./run.sh '${component}'"
+        sh "./run.sh ubuntu"
       }
-      else if (params.os_type == 'redhat' && params.deployment == 'deploy-vm') {
-        currentBuild.displayName = env.BUILD_NUMBER + "-" + params.os_type
-        component = params.os_type
-        sh "echo '${component}'"
-        sh "./run.sh '${component}'"
+      else if (params.project == 'xyz' && params.deployment == 'deploy-vm') {
+        currentBuild.displayName = env.BUILD_NUMBER + "-" + params.project
+        // component = params.project
+        // sh "echo '${component}'"
+        sh "./run.sh redhat"
       }
     }
   }
@@ -82,17 +82,17 @@ pipeline {
   stage('Destroy virtual machine') {
     steps {
      script {
-      if (params.os_type == 'ubuntu_clean-up' && params.deployment == 'clean-up') {
-        currentBuild.displayName = env.BUILD_NUMBER + "-" + params.os_type
-        component = params.os_type
-        sh "echo '${component}'"
-        sh "./run.sh '${component}'"
+      if (params.project == 'abc' && params.deployment == 'clean-up') {
+        currentBuild.displayName = env.BUILD_NUMBER + "-" + params.project
+        // component = params.project
+        // sh "echo '${component}'"
+        sh "./run.sh ubunut_clean-up"
       }
-      else if (params.os_type == 'redhat_clean-up' && params.deployment == 'clean-up') {
-        currentBuild.displayName = env.BUILD_NUMBER + "-" + params.os_type
-        component = params.os_type
+      else if (params.project == 'xyz' && params.deployment == 'clean-up') {
+        currentBuild.displayName = env.BUILD_NUMBER + "-" + params.project
+        component = params.project
         sh "echo '${component}'"
-        sh "./run.sh '${component}'"
+        sh "./run.sh redhat_clean-up"
       }
     }
   }
@@ -100,12 +100,18 @@ pipeline {
   stage('Reset virtual machine') {
     steps {
      script {
-      if (params.deployment == 'reset-vm') {
-        currentBuild.displayName = env.BUILD_NUMBER + "-" + params.os_type
-        component = params.os_type
-        sh "echo '${component}'"
-        sh "./run.sh '${component}'"
+      if (params.deployment == 'reset-vm' && params.project == 'abc') {
+        currentBuild.displayName = env.BUILD_NUMBER + "-" + params.project
+        sh "./run.sh 'reset-ubuntu'"
       }
+      else if (params.deployment == 'reset-vm' && params.project == 'xyz') {
+        currentBuild.displayName = env.BUILD_NUMBER + "-" + params.project
+        sh "./run.sh 'reset-redhat'"
+      }
+      else{
+        echo 'invalid combination'
+      }
+
     }
   }
  }
