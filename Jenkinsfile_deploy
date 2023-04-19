@@ -1,0 +1,76 @@
+pipeline {
+  agent {
+    label 'slave'
+  }
+  options {
+    ansiColor('xterm')
+    timestamps ()
+    buildDiscarder(logRotator(daysToKeepStr: '365'))
+  }
+  parameters {
+    choice(
+      name: 'os_type',
+      choices: [
+        'ubuntu',
+        'redhat'
+      ],
+      description: 'select os to create vm.'
+    )
+    gitParameter (
+      name: 'deplrepo_revision',
+      description: 'deployment repository branch',
+      branchFilter: 'origin/.+',
+      defaultValue: 'origin/main',
+      type: 'PT_BRANCH',
+      quickFilterEnabled: false, selectedValue: 'NONE', sortMode: 'ASCENDING', tagFilter: '*',
+      listSize: '0'
+    )
+  }
+  environment {
+    GIT_CREDENTIAL_ID = 'GIT-access-token2'
+  }
+  stages {
+    stage('Checkout repositories') {
+      steps {
+        // checkout deployment repo
+        checkout([
+          $class: 'GitSCM',
+          branches: [[name: "${params.deplrepo_revision}"]],
+          extensions: [
+            [$class: 'CleanBeforeCheckout', deleteUntrackedNestedRepositories: true],
+            [$class: 'CloneOption', noTags: false]
+          ],
+          userRemoteConfigs: [[
+            credentialsId: env.GIT_CREDENTIAL_ID,
+            url: 'https://github.com/shivangiverma369/vagrant'
+          ]]
+        ])
+        script {commitId = sh(returnStdout: true, script: 'git rev-parse --short HEAD')}
+      }
+    }
+    stage('Deploy -> Run Specific Playbook') {
+      steps {
+        script {
+
+          currentBuild.displayName = env.BUILD_NUMBER + "-" + params.os_type
+          component = params.os_type
+          sh "echo '${component}'"
+          sh "./run.sh '${component}'"
+
+        }
+      }
+    }
+  }
+  post {
+    success {
+      script {
+        sh "echo 'Jenkins ${JOB_BASE_NAME}' '#${BUILD_DISPLAY_NAME} Successful: <${BUILD_URL}|Open>'"
+      }
+    }
+    failure {
+      script {
+        sh "echo 'Jenkins ${JOB_BASE_NAME}' '#${BUILD_DISPLAY_NAME} Failed: <${env.BUILD_URL}|Open>'"
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/focal64"
+  (1..3).each do |i|
+    config.vm.define "ubuntu#{i}" do |node|
+      node.vm.hostname = "ubuntu#{i}"
+      node.vm.network "public_network"
+    node.vm.provider "virtualbox" do |vb|
+      vb.name = "ubuntu#{i}"
+      vb.memory = "2048"
+      vb.cpus = "2"
+     end
+    node.vm.provision "shell", inline: <<-SHELL
+    useradd -m -s /bin/bash ubuntu
+    echo 'ubuntu:ubuntup' | chpasswd
+  SHELL
+end
+end
+end
+  # end
+
+# end
+#     # config.vm.synced_folder ".", "/vagrant", disabled: true
+# end

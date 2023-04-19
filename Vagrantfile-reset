@@ -1,0 +1,23 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "generic/rhel8"
+  
+  config.vm.provision "shell", inline: <<-SHELL
+    # Destroy the guest
+    Vagrant.configure("2") do |inner_config|
+      inner_config.vm.define "redhat_default_168145307320_60292"
+    end
+    
+    Dir.chdir(File.dirname(__FILE__)) do
+      require 'vagrant'
+      Vagrant::Environment.new.vms["redhat_default_168145307320_60292"].destroy
+    end
+    
+    # Recreate the guest
+    config.vm.define "" do |inner_config|
+      # Configure the guest
+      inner_config.vm.box = "generic/rhel8"
+      # ...
+    end
+    
+   SHELL
+end
