@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
     end
     ubuntu1.vm.provision "shell", inline: <<-SHELL
   # Create a new user named "newuser"
-    useradd -m -s /bin/bash ubuntu
+    useradd -m -s /bin/bash ubuntu1
   
   # Set a password for the new user
     echo "ubuntu:ubuntup" | chpasswd
@@ -29,7 +29,7 @@ end
     end
     ubuntu2.vm.provision "shell", inline: <<-SHELL
   # Create a new user named "newuser"
-    useradd -m -s /bin/bash ubuntu
+    useradd -m -s /bin/bash ubuntu2
   
   # Set a password for the new user
     echo "ubuntu:ubuntup" | chpasswd
@@ -47,7 +47,7 @@ SHELL
     end
     redhat1.vm.provision "shell", inline: <<-SHELL
     # Set the username and password
-    useradd -m -p $(openssl passwd -1 redhatp) -s /bin/bash redhat
+    useradd -m -p $(openssl passwd -1 redhatp) -s /bin/bash redhat1
 
     # Allow password authentication
     sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
@@ -67,7 +67,7 @@ SHELL
     end
     redhat2.vm.provision "shell", inline: <<-SHELL
     # Set the username and password
-    useradd -m -p $(openssl passwd -1 redhatp) -s /bin/bash redhat
+    useradd -m -p $(openssl passwd -1 redhatp) -s /bin/bash redhat2
 
     # Allow password authentication
     sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
