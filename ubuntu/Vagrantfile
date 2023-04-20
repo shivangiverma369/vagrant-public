@@ -41,7 +41,7 @@ SHELL
     redhat1.vm.box = "generic/rhel8"
     redhat1.vm.hostname = "redhat1"
     redhat1.vm.provider "virtualbox" do |v|
-      v.name = redhat1
+      v.name = "redhat1"
       v.memory = 2048
       v.cpus = 2
     end
