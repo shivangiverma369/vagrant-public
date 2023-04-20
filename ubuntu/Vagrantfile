@@ -21,7 +21,7 @@ Vagrant.configure("2") do |config|
 
   # Red Hat machines
   config.vm.define "redhat1" do |redhat1|
-    redhat1.vm.box = "generic/redhat8"
+    redhat1.vm.box = "generic/rhel8"
     redhat1.vm.hostname = "redhat1"
     redhat1.vm.provider "virtualbox" do |v|
       v.memory = 2048
@@ -30,7 +30,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "redhat2" do |redhat2|
-    redhat2.vm.box = "generic/redhat8"
+    redhat2.vm.box = "generic/rhel8"
     redhat2.vm.hostname = "redhat2"
     redhat2.vm.provider "virtualbox" do |v|
       v.memory = 2048
