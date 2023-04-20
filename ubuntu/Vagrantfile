@@ -27,7 +27,7 @@ end
       v.memory = 2048
       v.cpus = 2
     end
-    ubuntu1.vm.provision "shell", inline: <<-SHELL
+    ubuntu2.vm.provision "shell", inline: <<-SHELL
   # Create a new user named "newuser"
     useradd -m -s /bin/bash ubuntu
   
@@ -45,7 +45,7 @@ SHELL
       v.memory = 2048
       v.cpus = 2
     end
-    config.vm.provision "shell", inline: <<-SHELL
+    redhat1.vm.provision "shell", inline: <<-SHELL
     # Set the username and password
     useradd -m -p $(openssl passwd -1 redhatp) -s /bin/bash redhat
 
@@ -65,7 +65,7 @@ SHELL
       v.memory = 2048
       v.cpus = 2
     end
-    config.vm.provision "shell", inline: <<-SHELL
+    redhat2.vm.provision "shell", inline: <<-SHELL
     # Set the username and password
     useradd -m -p $(openssl passwd -1 redhatp) -s /bin/bash redhat
 
