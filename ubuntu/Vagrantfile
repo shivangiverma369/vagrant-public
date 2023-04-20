@@ -15,7 +15,7 @@ Vagrant.configure("2") do |config|
     useradd -m -s /bin/bash ubuntu1
   
   # Set a password for the new user
-    echo "ubuntu:ubuntup" | chpasswd
+    echo "ubuntu1:ubuntup" | chpasswd
 SHELL
 end
 
@@ -32,7 +32,7 @@ end
     useradd -m -s /bin/bash ubuntu2
   
   # Set a password for the new user
-    echo "ubuntu:ubuntup" | chpasswd
+    echo "ubuntu2:ubuntup" | chpasswd
 SHELL
   end
 
@@ -61,7 +61,7 @@ SHELL
     redhat2.vm.box = "generic/rhel8"
     redhat2.vm.hostname = "redhat2"
     redhat2.vm.provider "virtualbox" do |v|
-      v.name = redhat2
+      v.name = "redhat2"
       v.memory = 2048
       v.cpus = 2
     end
