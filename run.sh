@@ -2,8 +2,8 @@
 set -x
 set -e
 
-ubuntu="/home/main/Desktop/vagrant/ubuntu"
-redhat="/home/main/Desktop/vagrant/redhat"
+abc="/home/main/Desktop/vagrant/abc-project"
+xyz="/home/main/Desktop/vagrant/xyz-project"
 
 repoRoot=$(realpath "$(dirname "$0")")
 
@@ -19,33 +19,33 @@ if [[ -z "$COMPONENT" ]]; then
 fi
 
 case "$COMPONENT" in
-ubuntu)
-    mkdir -p $ubuntu
-    cd $ubuntu
-    curl -o Vagrantfile https://raw.githubusercontent.com/shivangiverma369/vagrant-public/main/ubuntu/Vagrantfile
+abc)
+    mkdir -p $abc
+    cd $abc
+    curl -o Vagrantfile https://raw.githubusercontent.com/shivangiverma369/vagrant-public/main/abc/Vagrantfile
     vagrant up
     ;;
-ubuntu_clean-up)
-    cd $ubuntu
+abc_clean-up)
+    cd $abc
     vagrant halt && vagrant destroy -f
     ;;
-redhat)
-    mkdir -p $redhat
-    cd $redhat
-    curl -o Vagrantfile https://raw.githubusercontent.com/shivangiverma369/vagrant-public/main/redhat/Vagrantfile
+xyz)
+    mkdir -p $xyz
+    cd $xyz
+    curl -o Vagrantfile https://raw.githubusercontent.com/shivangiverma369/vagrant-public/main/xyz/Vagrantfile
     vagrant up
     ;;
-redhat_clean-up)
-    cd $redhat
+xyz_clean-up)
+    cd $xyz
     vagrant halt && vagrant destroy -f
     ;;
-reset-ubuntu)
-    cd $ubuntu
+reset-abc)
+    cd $abc
     vagrant halt && vagrant destroy -f 
     vagrant up
    ;;
-reset-redhat)
-    cd $redhat
+reset-xyz)
+    cd $xyz
     vagrant halt && vagrant destroy -f 
     vagrant up
    ;;         

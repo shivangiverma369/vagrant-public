@@ -68,13 +68,13 @@ pipeline {
         currentBuild.displayName = env.BUILD_NUMBER + "-" + params.project
         component = params.project
         sh "echo '${component}'"
-        sh "./run.sh ubuntu"
+        sh "./run.sh ${component}"
       }
       else if (params.project == 'xyz' && params.deployment == 'deploy-vm') {
         currentBuild.displayName = env.BUILD_NUMBER + "-" + params.project
-        // component = params.project
-        // sh "echo '${component}'"
-        sh "./run.sh redhat"
+        component = params.project
+        sh "echo '${component}'"
+        sh "./run.sh ${component}"
       }
     }
   }
@@ -86,13 +86,13 @@ pipeline {
         currentBuild.displayName = env.BUILD_NUMBER + "-" + params.project
         // component = params.project
         // sh "echo '${component}'"
-        sh "./run.sh ubuntu_clean-up"
+        sh "./run.sh abc_clean-up"
       }
       else if (params.project == 'xyz' && params.deployment == 'clean-up') {
         currentBuild.displayName = env.BUILD_NUMBER + "-" + params.project
-        component = params.project
-        sh "echo '${component}'"
-        sh "./run.sh redhat_clean-up"
+        // component = params.project
+        // sh "echo '${component}'"
+        sh "./run.sh xyz_clean-up"
       }
     }
   }
@@ -102,11 +102,11 @@ pipeline {
      script {
       if (params.deployment == 'reset-vm' && params.project == 'abc') {
         currentBuild.displayName = env.BUILD_NUMBER + "-" + params.project
-        sh "./run.sh 'reset-ubuntu'"
+        sh "./run.sh 'reset-abc'"
       }
       else if (params.deployment == 'reset-vm' && params.project == 'xyz') {
         currentBuild.displayName = env.BUILD_NUMBER + "-" + params.project
-        sh "./run.sh 'reset-redhat'"
+        sh "./run.sh 'reset-xyz'"
       }
       else{
         echo 'invalid combination'
